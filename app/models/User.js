@@ -9,7 +9,7 @@ module.exports = function(app, db) {
       firstName: {type: String},
       lastName: {type: String},
       password: {type: String},
-      emailAddress: {type: String, unique: true},
+      emailAddress: {type: String},
       block: {type: Boolean},
       pinCode: {type: String},
       sessionToken: {type: String},

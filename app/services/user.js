@@ -5,6 +5,7 @@
 module.exports = function(app, q) {
   var User = app.db.User,
     jwt  = require('jsonwebtoken');
+
   app.services._guestLogin = function(payload){
     var deferred = q.defer();
     var register_info = new User(payload);
@@ -14,7 +15,7 @@ module.exports = function(app, q) {
         deferred.reject({
           code: 400,
           content: 'Bad Request',
-          message: 'Email match found'
+          message: 'Error In API'
         });
       }
       else {
@@ -33,7 +34,7 @@ module.exports = function(app, q) {
         });
       }
     });
-
+    return deferred.promise;
   };
 
   app.services._getUsers = function(userIDs, filers) {
@@ -83,10 +84,8 @@ module.exports = function(app, q) {
               email:userInfo.email,
               pictureUrl:userInfo.pictureUrl,
               socialId:userInfo.socialId,
-              social: userInfo.social,
               sessionToken:token,
-              isVerified: false,
-              createdAt: new Date()
+              createdAt: new Date().valueOf()
             });
             user_info.save(function(err,data){
               if(err){

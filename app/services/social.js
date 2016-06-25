@@ -24,6 +24,9 @@ module.exports = function(app,q) {
           .then(function(response){
             deferred.resolve(response);
           })
+          .catch(function(error){
+            deferred.reject(error);
+          })
       }
       else {
         deferred.reject(res.error.message);
