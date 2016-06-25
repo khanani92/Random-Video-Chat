@@ -1,0 +1,26 @@
+{
+  "evil": true,
+  "bitwise": false,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "maxparams": 5,
+  "immed": true,
+  "indent": 2,
+  "newcap": true,
+  "noarg": true,
+  "quotmark": "single",
+  "notypeof": true,
+  "undef": true,
+  "unused": "vars",
+  "regexp": true,
+  "trailing": true,
+  "smarttabs": true,
+  "white": true,
+  "predef": ["angular"],
+  "jasmine": true,
+  "globals": {
+    "$" : true
+  }
+}
