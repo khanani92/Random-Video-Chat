@@ -15,11 +15,15 @@
   function configuration($stateProvider){
 
     $stateProvider
-      .state('Welcome', {
+      .state('shell.welcome', {
         url:'/welcome',
-        templateUrl:'src/welcome/welcome.html',
-        controller: 'Welcome as vm',
-        title: 'ng-Super Welcome'
+        views: {
+          'content@shell': {
+            templateUrl: 'src/welcome/welcome.html',
+            controller: 'Welcome as vm'
+          }
+        },
+        title: 'Random Video Chat'
       });
   }
 

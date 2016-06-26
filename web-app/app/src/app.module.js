@@ -14,7 +14,9 @@
   /**
     * Application modules
   **/
+    'app.shell',
     'app.welcome'
+
   ]);
 
 }());
