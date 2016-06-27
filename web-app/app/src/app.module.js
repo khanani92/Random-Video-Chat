@@ -16,7 +16,8 @@
   **/
     'app.shell',
     'app.welcome'
-
+,
+'app.chat'
   ]);
 
 }());
