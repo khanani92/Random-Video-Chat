@@ -33,6 +33,10 @@
           'subNavBar@shell': {
             templateUrl: 'src/shell/subNav.html',
             controller: 'SubNav as vm'
+          },
+          'footer@shell': {
+            templateUrl: 'src/shell/footer.html',
+            controller: 'SubNav as vm'
           }
         }
       });
