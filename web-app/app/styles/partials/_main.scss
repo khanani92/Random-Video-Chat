@@ -1,7 +1,77 @@
+.body-backGround{
+  background-color: #e9ebee;
+}
 .main-col{
-  margin-left:-10px;
+  margin-left: 4%;
 }
 
 .sub-col{
- margin-left: 10px;
+  margin-left: -15px;
+  border: 1px grey solid;
+  border-radius: 5px;
+  margin-top: 8px;
+  background-color: #fafafa;
 }
+
+.single-video-box-inner{
+  height: 230px;
+  width: 100%;
+  border: 1px grey solid;
+  border-radius: 5px;
+}
+
+.single-video-box-outer{
+  margin: 8px;
+}
+
+.chat-box-heading {
+  font-size: 32px;
+}
+.chat-box-btn-box{
+  margin-top: 5px;
+}
+
+.chat-box-main{
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.chat-box-subLine {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.chat-message{
+  margin-top: 1px;
+}
+
+.chat-message-user1-name{
+  color: #0000ff;
+  font-weight: bold;
+}
+
+.chat-message-text{
+  font-style: italic;
+}
+
+.chat-message-user2-name{
+  color: red;
+  font-weight: bold;
+}
+
+.chat-message-create-box{
+  border: 1px grey solid;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.chat-message-create-textarea{
+  width: 100%;
+  height: 50px;
+}
+
+.chat-message-create-sendbtn{
+  width: 100%;
+  height: 50px;
+}
+
