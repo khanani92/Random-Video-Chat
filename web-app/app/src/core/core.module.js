@@ -10,7 +10,8 @@
 
   angular.module('app.core', [
     'ui.router',
-    'restangular'
+    'restangular',
+    'btford.socket-io'
   ]);
 
 }());

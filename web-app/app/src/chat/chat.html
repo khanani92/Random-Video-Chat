@@ -2,16 +2,20 @@
   <div class="col-md-6 main-col">
     <div class="single-video-box-outer">
 
-      <img src="images/chat/pic1.jpg" class="single-video-box-inner" >
+      <!--<img src="images/chat/pic1.jpg" class="single-video-box-inner" >-->
+      <video id="remoteVideo" autoplay></video>
+
 
     </div>
     <div class="single-video-box-outer">
 
-      <img src="images/chat/pic2.jpg" class="single-video-box-inner">
-
+      <!--<img src="images/chat/pic2.jpg" class="single-video-box-inner">-->
+      <video id="localVideo" autoplay muted></video>
     </div>
   </div>
   <div class="col-md-5 sub-col">
+    <input id="videoCallButton" type="button" disabled value="Video Call"/>
+    <input id="endCallButton" type="button" disabled value="End Call"/>
     <div class="row">
       <div class="col-md-6">
         <span class="chat-box-heading">Let Chats !!</span>

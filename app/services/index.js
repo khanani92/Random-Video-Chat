@@ -3,5 +3,5 @@ module.exports = function(app, q) {
     require('./social')(app, q);
     require('./aes')(app, q);
     require('./checkSessionToken')(app, q);
-    require('./session')(app, q);
+    require('./socket')(app, q);
 };
