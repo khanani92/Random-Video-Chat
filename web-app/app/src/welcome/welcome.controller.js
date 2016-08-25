@@ -30,7 +30,7 @@
      */
 
     function testFunction(num){
-      console.info('This is a test function number ' + num);
+      //console.info('This is a test function number ' + num);
     }
   }
 

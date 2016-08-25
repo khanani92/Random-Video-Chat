@@ -21,8 +21,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jshint',
-    'karma:dist',
-    'ngdocs',
+    //'karma:dist',
+    //'ngdocs',
     'clean:dist',
     'html2js',
     'compass:dist',

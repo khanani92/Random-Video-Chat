@@ -28,7 +28,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use('/', router);
-app.use('/admin',express.static('web-portal'));
+app.use('/admin',express.static(__dirname +'/web-app/dist'));
+
 
 
 

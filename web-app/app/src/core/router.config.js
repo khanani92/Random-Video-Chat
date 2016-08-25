@@ -10,7 +10,8 @@
 
   angular.module('app.core')
     .config(configuration)
-    .run(routingEvents);
+    .run(routingEvents)
+    .run(socketConnection);
 
   /* @ngInject */
   function configuration($urlRouterProvider){
@@ -31,6 +32,11 @@
       //do some title setting
       $rootScope.pageTitle = toState.title || 'app';
     });
+  }
+  function socketConnection(socket){
+    //var url = 'http://localhost:3000';
+    var url = 'https://random-video-chat.herokuapp.com/';
+    socket.socketConnect(url);
   }
 
 }());

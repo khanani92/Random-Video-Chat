@@ -13,10 +13,10 @@
 		.controller('Chat', Chat);
 
   /* @ngInject */
-	function Chat(){
+	function Chat(socket){
 		var vm = this;
 
-		vm.testFunction = testFunction;
+		vm.addMeToSocket = addMeToSocket;
 
     /////////////////////
 
@@ -28,10 +28,18 @@
      * @description
      * My Description rules
      */
-    function testFunction(num){
-			console.info('This is a test function');
+    function addMeToSocket(num){
+			socket.emit('register',{id:Math.floor((Math.random() * 100) + 1)})
 		}
-    
+
+    socket.on('registeredToSocket',function(data){
+      console.log(data);
+    });
+
+    socket.on('listOfOnlineUser',function(data){
+      vm.listOfOnlineUser = data;
+    })
+
 	}
 
 }());
