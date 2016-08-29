@@ -43,7 +43,7 @@ module.exports = function(app,q) {
           log('Client ID ' + socket.id + ' created room ' + room);
           socket.emit('created', room, socket.id);
 
-        } else if (numClients === 2) {
+        } else if (numClients > 1) {
           log('Client ID ' + socket.id + ' joined room ' + room);
           io.sockets.in(room).emit('join', room);
           socket.join(room);

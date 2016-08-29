@@ -20,7 +20,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['karma:test']);
 
   grunt.registerTask('build', [
-    'jshint',
+    //'jshint',
     //'karma:dist',
     //'ngdocs',
     'clean:dist',
