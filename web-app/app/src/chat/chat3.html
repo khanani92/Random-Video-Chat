@@ -1,6 +1,17 @@
 <div>
   <h1>Realtime communication with WebRTC</h1>
+  <button ng-click="vm.addMeToSocket()"> Add me Ad Online</button>
+  {{vm.listOfOnlineUser}}
 
+  <h2>Call Setup</h2>
+  <input type="text" ng-model="vm.userSocket">
+  <button ng-click="vm.createCall()">Call Him</button>
+  <button ng-if="vm.receiveBtn" ng-click="vm.receiveCall()">Receive Call</button>
+  <button ng-if="vm.receiveBtn" ng-click="vm.rejectCall()">Reject Call</button>
+  <p>{{vm.message}}</p>
+
+  <!--<input type="text" ng-model="vm.roomName">-->
+  <!--<button ng-click="vm.roomCreateJoin()">Create OR Join Room</button>-->
   <div id="videos">
     <video id="localVideo" autoplay muted></video>
     <video id="remoteVideo" autoplay></video>

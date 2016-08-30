@@ -18,8 +18,14 @@
     //var constraints = {audio:true, video: true};
     var constraints = { video: true};
     vm.roomName = '';
+    vm.userSocket = '';
+    vm.receiveBtn = false;
 
     vm.addMeToSocket = addMeToSocket;
+    vm.roomCreateJoin = roomCreateJoin;
+    vm.createCall = createCall;
+    vm.receiveCall = receiveCall;
+    vm.rejectCall = rejectCall;
 
     /////////////////////
 
@@ -43,6 +49,41 @@
       vm.listOfOnlineUser = data;
     });
 
+    function createCall(){
+      socket.emit('createCall',{userSocketID: vm.userSocket})
+    }
+
+    socket.on('inComingCall', function(data){
+      console.log('inComingCall');
+      vm.receiveBtn = true;
+      vm.callInfo = data;
+    });
+
+    function receiveCall(){
+      socket.emit('callAccepted',vm.callInfo);
+      isChannelReady = true;
+      gotStream(vm.myStream)
+    }
+
+    function rejectCall(){
+      socket.emit('callReject',vm.callInfo)
+    }
+
+    socket.on('callRejectedByUser',function(){
+      console.log('callRejectedByUser');
+      vm.message = 'User Rejected Your Call';
+    });
+
+    socket.on('callAcceptedByUser',function(){
+      isInitiator = true;
+      isChannelReady = true;
+      gotStream(vm.myStream)
+    });
+
+
+
+
+
 
 
     ///Audio/Video Capture
@@ -55,6 +96,7 @@
     var pc;
     var remoteStream;
     var turnReady;
+    vm.myStream;
 
     var pcConfig = {
       'iceServers': [
@@ -80,18 +122,23 @@
 
 //var room = 'foo';
 // Could prompt for room name:
-    var room = prompt('Enter room name:');
+    var room; //= prompt('Enter room name:');
 
     //var socket = io.connect();
 
-    if (room !== '') {
-      socket.emit('create or join', room);
-      console.log('Attempted to create or  join room', room);
+    function roomCreateJoin(){
+      if (vm.roomName !== '') {
+        socket.emit('create or join', vm.roomName);
+        console.log('Attempted to create or  join room', vm.roomName);
+      }
+
     }
+
 
     socket.on('created', function(room) {
       console.log('Created room ' + room);
       isInitiator = true;
+      gotStream(vm.myStream)
     });
 
     socket.on('full', function(room) {
@@ -107,6 +154,7 @@
     socket.on('joined', function(room) {
       console.log('joined: ' + room);
       isChannelReady = true;
+      gotStream(vm.myStream);
     });
 
     socket.on('log', function(array) {
@@ -153,15 +201,17 @@
       audio: false,
       video: true
     })
-      .then(gotStream)
+      .then(function(stream){
+        window.localStream = localStream = stream;
+      })
       .catch(function(e) {
         alert('getUserMedia() error: ' + e.name);
       });
 
     function gotStream(stream) {
       console.log('Adding local stream.');
-      localVideo.src = window.URL.createObjectURL(stream);
-      localStream = stream;
+      localVideo.src = window.URL.createObjectURL(window.localStream);
+      //localStream = stream;
       sendMessage('got user media');
       if (isInitiator) {
         maybeStart();

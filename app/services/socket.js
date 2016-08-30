@@ -5,6 +5,7 @@
 module.exports = function(app,q) {
   app.constants.sessionManagement = require('./session');
   var io;
+  var call=[];
 
   app.services._socketEvents = function(io){
     io.on('connection',function(socket){
@@ -14,6 +15,37 @@ module.exports = function(app,q) {
       socket.on('register', function(data){
         return  app.services._addMySession(socket.client.id, data);
       });
+
+      socket.on('createCall', function(data){
+        console.log('createCall');
+        io.sockets.connected['/#'+data.userSocketID].emit('inComingCall', {toSocketID: data.userSocketID, fromSocketID: socket.client.id});
+      });
+
+      socket.on('callAccepted', function(data){
+        console.log('callAccepted');
+        var roomID = generateUUID();
+        data['roomID'] = roomID;
+        io.sockets.connected['/#'+data.fromSocketID].emit('callAcceptedByUser', data);
+
+      });
+
+      socket.on('callReject', function(data){
+        console.log('callReject from' + data.fromSocketID);
+        io.sockets.connected['/#'+data.fromSocketID].emit('callRejectedByUser', {});
+      });
+
+      function generateUUID() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = (d + Math.random()*16)%16 | 0;
+          d = Math.floor(d/16);
+          return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+      };
+
+
+
 
 
       /////////////////////////////
@@ -35,7 +67,7 @@ module.exports = function(app,q) {
         log('Received request to create or join room ' + room);
 
         //var numClients = io.sockets.sockets.length;
-        var numClients = Object.keys(io.sockets.connected).length;;
+        var numClients = Object.keys(io.sockets.connected).length;
         log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
         if (numClients === 1) {
@@ -68,6 +100,9 @@ module.exports = function(app,q) {
       socket.on('bye', function(){
         console.log('received bye');
       });
+
+
+
 
       ///////////////////////////
       ///////////////////////////
