@@ -19,13 +19,16 @@
     var constraints = { video: true};
     vm.roomName = '';
     vm.userSocket = '';
+    vm.testVideo = '';
     vm.receiveBtn = false;
+    var testVideo = document.querySelector('#testVideo');
 
     vm.addMeToSocket = addMeToSocket;
     vm.roomCreateJoin = roomCreateJoin;
     vm.createCall = createCall;
     vm.receiveCall = receiveCall;
     vm.rejectCall = rejectCall;
+    vm.addVideo = addVideo;
 
     /////////////////////
 
@@ -79,6 +82,10 @@
       isChannelReady = true;
       gotStream(vm.myStream)
     });
+
+    function addVideo(){
+      testVideo.src = vm.testVideo;
+    }
 
 
 
@@ -280,8 +287,9 @@
 
     function handleRemoteStreamAdded(event) {
       console.log('Remote stream added.');
+      window.remoteStream = remoteStream = event.stream;
+      console.log(window.URL.createObjectURL(event.stream));
       remoteVideo.src = window.URL.createObjectURL(event.stream);
-      remoteStream = event.stream;
     }
 
     function handleCreateOfferError(event) {
@@ -342,11 +350,6 @@
       }
     }
 
-    function handleRemoteStreamAdded(event) {
-      console.log('Remote stream added.');
-      remoteVideo.src = window.URL.createObjectURL(event.stream);
-      remoteStream = event.stream;
-    }
 
     function handleRemoteStreamRemoved(event) {
       console.log('Remote stream removed. Event: ', event);
