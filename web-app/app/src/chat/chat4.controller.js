@@ -8,27 +8,23 @@
 
   'use strict';
 
-  angular
-    .module('app.chat')
-    .controller('Chat3', Chat);
+	angular
+		.module('app.chat')
+		.controller('Chat4', Chat);
 
   /* @ngInject */
-  function Chat(socket){
-    var vm = this;
+	function Chat(socket){
+		var vm = this;
     //var constraints = {audio:true, video: true};
-    var constraints = { video: true};
-    vm.roomName = '';
-    vm.userSocket = '';
-    vm.testVideo = '';
-    vm.receiveBtn = false;
-    var testVideo = document.querySelector('#testVideo');
-
-    vm.addMeToSocket = addMeToSocket;
-    vm.roomCreateJoin = roomCreateJoin;
-    vm.createCall = createCall;
-    vm.receiveCall = receiveCall;
-    vm.rejectCall = rejectCall;
-    vm.addVideo = addVideo;
+    //var constraints = { video: true};
+    var isChannelReady = false;
+    var isInitiator = false;
+    var isStarted = false;
+    var localStream;
+    var pc;
+    var remoteStream;
+    var turnReady;
+		vm.addMeToSocket = addMeToSocket;
 
     /////////////////////
 
@@ -41,8 +37,8 @@
      * My Description rules
      */
     function addMeToSocket(num){
-      socket.emit('register',{id:Math.floor((Math.random() * 100) + 1)})
-    }
+			socket.emit('register',{id:Math.floor((Math.random() * 100) + 1)})
+		}
 
     socket.on('registeredToSocket',function(data){
       //console.log(data);
@@ -52,90 +48,15 @@
       vm.listOfOnlineUser = data;
     });
 
-    function createCall(){
-      socket.emit('createCall',{userSocketID: vm.userSocket})
-    }
-
-    socket.on('inComingCall', function(data){
-      console.log('inComingCall');
-      vm.receiveBtn = true;
-      vm.callInfo = data;
-    });
-
-    function receiveCall(){
-      socket.emit('callAccepted',vm.callInfo);
-      isChannelReady = true;
-      gotStream(vm.myStream)
-    }
-
-    function rejectCall(){
-      socket.emit('callReject',vm.callInfo)
-    }
-
-    socket.on('callRejectedByUser',function(){
-      console.log('callRejectedByUser');
-      vm.message = 'User Rejected Your Call';
-    });
-
-    socket.on('callAcceptedByUser',function(){
-      isInitiator = true;
-      isChannelReady = true;
-      gotStream(vm.myStream)
-    });
-
-    function addVideo(){
-      testVideo.src = vm.testVideo;
-    }
 
 
 
 
-
-
-
-    ///Audio/Video Capture
-
-
-    var isChannelReady = false;
-    var isInitiator = false;
-    var isStarted = false;
-    var localStream;
-    var pc;
-    var remoteStream;
-    var turnReady;
-    vm.myStream;
 
     var pcConfig = {
-      'iceServers': [
-        {
-          'url': 'stun:stun.l.google.com:19302'
-        },
-        {url:'stun:stun.l.google.com:19302'},
-  {url:'stun:stun1.l.google.com:19302'},
-  {url:'stun:stun2.l.google.com:19302'},
-  {url:'stun:stun3.l.google.com:19302'},
-  {url:'stun:stun4.l.google.com:19302'},
-        {
-          url: 'turn:numb.viagenie.ca',
-          credential: 'freelancerjob2',
-          username: 'muddassir_92@hotmail.com'
-        },
-        {
-          url: 'turn:numb.viagenie.ca',
-          credential: 'muazkh',
-          username: 'webrtc@live.com'
-        },
-        {
-          url: 'turn:192.158.29.39:3478?transport=udp',
-          credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-          username: '28224511:1379330808'
-        },
-        {
-          url: 'turn:192.158.29.39:3478?transport=tcp',
-          credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-          username: '28224511:1379330808'
-        }
-      ]
+      'iceServers': [{
+        'url': 'stun:stun.l.google.com:19302'
+      }]
     };
 
 // Set up audio and video regardless of what devices are present.
@@ -150,23 +71,17 @@
 
 //var room = 'foo';
 // Could prompt for room name:
-    var room; //= prompt('Enter room name:');
+    var room = prompt('Enter room name:');
 
-    //var socket = io.connect();
 
-    function roomCreateJoin(){
-      if (vm.roomName !== '') {
-        socket.emit('create or join', vm.roomName);
-        console.log('Attempted to create or  join room', vm.roomName);
-      }
-
+    if (room !== '') {
+      socket.emit('create or join', room);
+      console.log('Attempted to create or  join room', room);
     }
-
 
     socket.on('created', function(room) {
       console.log('Created room ' + room);
       isInitiator = true;
-      gotStream(vm.myStream)
     });
 
     socket.on('full', function(room) {
@@ -182,7 +97,6 @@
     socket.on('joined', function(room) {
       console.log('joined: ' + room);
       isChannelReady = true;
-      gotStream(vm.myStream);
     });
 
     socket.on('log', function(array) {
@@ -229,28 +143,32 @@
       audio: false,
       video: true
     })
-      .then(function(stream){
-        window.localStream = localStream = stream;
-      })
+      .then(gotStream)
       .catch(function(e) {
         alert('getUserMedia() error: ' + e.name);
       });
 
     function gotStream(stream) {
       console.log('Adding local stream.');
-      localVideo.src = window.URL.createObjectURL(window.localStream);
-      //localStream = stream;
+      localVideo.src = window.URL.createObjectURL(stream);
+      localStream = stream;
       sendMessage('got user media');
       if (isInitiator) {
         maybeStart();
       }
     }
 
-    //if (location.hostname !== 'localhost') {
-    //  requestTurn(
-    //    'https://numb.viagenie.ca/turn?username=muddassir_92@hotmail.com&key=karachijob'
-    //  );
-    //}
+    var constraints = {
+      video: true
+    };
+
+    console.log('Getting user media with constraints', constraints);
+
+    if (location.hostname !== 'localhost') {
+      requestTurn(
+        'https://computeengineondemand.appspot.com/turn?username=41784574&key=4080218913'
+      );
+    }
 
     function maybeStart() {
       console.log('>>>>>>> maybeStart() ', isStarted, localStream, isChannelReady);
@@ -302,9 +220,8 @@
 
     function handleRemoteStreamAdded(event) {
       console.log('Remote stream added.');
-      window.remoteStream = remoteStream = event.stream;
-      console.log(window.URL.createObjectURL(event.stream));
       remoteVideo.src = window.URL.createObjectURL(event.stream);
+      remoteStream = event.stream;
     }
 
     function handleCreateOfferError(event) {
@@ -353,10 +270,16 @@
           if (xhr.readyState === 4 && xhr.status === 200) {
             var turnServer = JSON.parse(xhr.responseText);
             console.log('Got TURN server: ', turnServer);
+            //pcConfig.iceServers.push({
+            //  'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
+            //  'credential': turnServer.password
+            //});
             pcConfig.iceServers.push({
-              'url': 'turn:' + turnServer.username + '@' + turnServer.turn,
-              'credential': turnServer.password
+              url: 'turn:numb.viagenie.ca',
+              credential: 'freelancerjob2',
+              username: 'muddassir_92@hotmail.com'
             });
+
             turnReady = true;
           }
         };
@@ -365,6 +288,11 @@
       }
     }
 
+    function handleRemoteStreamAdded(event) {
+      console.log('Remote stream added.');
+      remoteVideo.src = window.URL.createObjectURL(event.stream);
+      remoteStream = event.stream;
+    }
 
     function handleRemoteStreamRemoved(event) {
       console.log('Remote stream removed. Event: ', event);
@@ -467,6 +395,8 @@
       sdpLines[mLineIndex] = mLineElements.join(' ');
       return sdpLines;
     }
+
+
 
 
   }

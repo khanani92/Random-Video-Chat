@@ -56,6 +56,16 @@
           }
         },
         title: 'Random Video Chat'
+      })
+      .state('shell.chat4', {
+        url:'/chat4',
+        views: {
+          'content@shell': {
+            templateUrl: 'src/chat/chat4.html',
+            controller: 'Chat4 as vm'
+          }
+        },
+        title: 'Random Video Chat'
       });
   }
 
