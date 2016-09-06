@@ -34,8 +34,8 @@
     });
   }
   function socketConnection(socket){
-    var url = 'http://localhost:3000';
-    //var url = 'https://random-video-chat.herokuapp.com/';
+    //var url = 'http://localhost:3000';
+      var url = 'https://random-video-chat.herokuapp.com/';
     socket.socketConnect(url);
   }
 

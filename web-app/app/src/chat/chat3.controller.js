@@ -119,22 +119,23 @@
           url: 'turn:numb.viagenie.ca',
           credential: 'freelancerjob2',
           username: 'muddassir_92@hotmail.com'
-        },
-        {
-          url: 'turn:numb.viagenie.ca',
-          credential: 'muazkh',
-          username: 'webrtc@live.com'
-        },
-        {
-          url: 'turn:192.158.29.39:3478?transport=udp',
-          credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-          username: '28224511:1379330808'
-        },
-        {
-          url: 'turn:192.158.29.39:3478?transport=tcp',
-          credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-          username: '28224511:1379330808'
         }
+        //},
+        //{
+        //  url: 'turn:numb.viagenie.ca',
+        //  credential: 'muazkh',
+        //  username: 'webrtc@live.com'
+        //},
+        //{
+        //  url: 'turn:192.158.29.39:3478?transport=udp',
+        //  credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        //  username: '28224511:1379330808'
+        //},
+        //{
+        //  url: 'turn:192.158.29.39:3478?transport=tcp',
+        //  credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        //  username: '28224511:1379330808'
+        //}
       ]
     };
 
@@ -274,7 +275,7 @@
 
     function createPeerConnection() {
       try {
-        pc = new RTCPeerConnection(null);
+        pc = new RTCPeerConnection(pcConfig,{ optional : [{"googIPv6": true}]});
         pc.onicecandidate = handleIceCandidate;
         pc.onaddstream = handleRemoteStreamAdded;
         pc.onremovestream = handleRemoteStreamRemoved;
